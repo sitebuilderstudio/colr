@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== colr for WordPress ===
 Contributors: sitebuilderstudio
 Donate link: htts://wpcolr.com
 Tags: colors, color scheme, dark mode
