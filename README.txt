@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: Joe Kneeland
 Donate link: htts://wpcolr.com
-Tags: colors, spam
+Tags: colors, color scheme, dark mode
 Requires at least: 5.9
 Tested up to: 5.9.3
 Stable tag: 5.9
