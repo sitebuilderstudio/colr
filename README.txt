@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: Joe Kneeland
+Contributors: sitebuilderstudio
 Donate link: htts://wpcolr.com
 Tags: colors, color scheme, dark mode
 Requires at least: 5.9
