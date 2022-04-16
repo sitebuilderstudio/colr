@@ -36,3 +36,8 @@ The 'wp_head' hook is then utilized to process this into inline css.
 == Upgrade Notice ==
 
 == Arbitrary section ==
+
+== Credits ==
+
+* Hat's off to Taufik Norrohman for the slick js color picker!
+url: https://github.com/taufik-nurrohman/color-picker
