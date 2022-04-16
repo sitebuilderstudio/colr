@@ -86,6 +86,7 @@ run_colr();
  */
 add_shortcode( 'colr_picker', 'colr_picker' );
 function colr_picker() {
+    ob_start();
     return "inside colr picker shortcode";
     //return "foo = {$atts['foo']}";
 }
