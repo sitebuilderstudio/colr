@@ -1,5 +1,12 @@
 <?php
 
+$show_errors = false;
+if($show_errors) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
+
 /**
  * @link              htts://wpcolr.com
  * @since             1.0.0
@@ -33,7 +40,7 @@ function dd($var){
 /**
  * Define constants
  */
-define( 'COLR_VERSION', '1.0.0' );
+define( 'COLR_VERSION', time() ); // TODO - after dev change to '1.0.0'
 define( 'COLR_FILE_PATH', __FILE__ );
 define( 'COLR_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'COLR_DIR_URL', plugin_dir_url( __FILE__ ) );

@@ -140,9 +140,6 @@ class Colr_Admin {
         $html = ob_get_clean();
         echo $html;
         exit();
-        echo '<div class="wrap">';
-        echo '<p>Here is where the form would go if I actually had options.</p>';
-        echo '</div>';
     }
 
 }
