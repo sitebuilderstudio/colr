@@ -100,4 +100,49 @@ class Colr_Admin {
 
 	}
 
+    public function colr_admin_menu() {
+        add_options_page( 'Colr Plugin Options', 'Colr Schemes', 'manage_options', 'colr-options-page', [$this,'colr_admin_options'] );
+    }
+
+    public function register_options() {
+        register_setting( 'colr-options-defaults-group', 'colr_default' );
+        register_setting( 'colr-options-defaults-group', 'colr_default_dark' );
+    }
+
+    public function colr_admin_options() {
+
+        if ( !current_user_can( 'manage_options' ) )  {
+            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+        }
+        ob_start();
+        ?>
+        <div class="wrap">
+            <h1>Colr Settings</h1>
+            <form method="post" action="options.php">
+                <?php settings_fields( 'colr-options-defaults-group' ); ?>
+                <?php do_settings_sections( 'colr-options-defaults-group' ); ?>
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">Default Colr Scheme</th>
+                        <td><input type="text" name="colr_default" value="<?php echo esc_attr( get_option('colr_default') ); ?>" /></td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row">Default Dark Mode</th>
+                        <td><input type="text" name="colr_default_dark" value="<?php echo esc_attr( get_option('colr_default_dark') ); ?>" /></td>
+                    </tr>
+
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
+        $html = ob_get_clean();
+        echo $html;
+        exit();
+        echo '<div class="wrap">';
+        echo '<p>Here is where the form would go if I actually had options.</p>';
+        echo '</div>';
+    }
+
 }

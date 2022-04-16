@@ -1,13 +1,6 @@
 <?php
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
  * @link              htts://wpcolr.com
  * @since             1.0.0
  * @package           Colr
@@ -15,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       Colr
  * Plugin URI:        htts://wpcolr.com
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Gives users the ability to control their personal color theme.
  * Version:           1.0.0
  * Author:            Joe Kneeland
  * Author URI:        htts://wpcolr.com
@@ -30,19 +23,27 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+function dd($var){
+    echo "<pre>";
+    var_dump($var);
+    echo "</pre>";
+    die;
+}
+
 /**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
+ * Define constants
  */
 define( 'COLR_VERSION', '1.0.0' );
+define( 'COLR_FILE_PATH', __FILE__ );
+define( 'COLR_DIR_PATH', plugin_dir_path( __FILE__ ) );
+define( 'COLR_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-colr-activator.php
  */
 function activate_colr() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-colr-activator.php';
+	require_once COLR_DIR_PATH . 'includes/class-colr-activator.php';
 	Colr_Activator::activate();
 }
 
@@ -51,7 +52,7 @@ function activate_colr() {
  * This action is documented in includes/class-colr-deactivator.php
  */
 function deactivate_colr() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-colr-deactivator.php';
+	require_once COLR_DIR_PATH . 'includes/class-colr-deactivator.php';
 	Colr_Deactivator::deactivate();
 }
 
@@ -62,7 +63,7 @@ register_deactivation_hook( __FILE__, 'deactivate_colr' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-colr.php';
+require COLR_DIR_PATH . 'includes/class-colr.php';
 
 /**
  * Begins execution of the plugin.
@@ -86,7 +87,7 @@ run_colr();
  */
 add_shortcode( 'colr_picker', 'colr_picker' );
 function colr_picker() {
-    ob_start();
-    return "inside colr picker shortcode";
-    //return "foo = {$atts['foo']}";
+    require_once COLR_DIR_PATH . 'public/class-colr-public.php';
+    Colr_Public::colr_picker();
 }
+
