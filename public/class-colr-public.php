@@ -1,52 +1,10 @@
 <?php
 
-/**
- * The public-facing functionality of the plugin.
- *
- * @link       htts://wpcolr.com
- * @since      1.0.0
- *
- * @package    Colr
- * @subpackage Colr/public
- */
-
-/**
- * The public-facing functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the public-facing stylesheet and JavaScript.
- *
- * @package    Colr
- * @subpackage Colr/public
- * @author     Joe Kneeland <joe@gens.dev>
- */
 class Colr_Public {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
 	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
 	private $version;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
-	 */
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
@@ -54,52 +12,18 @@ class Colr_Public {
 
 	}
 
-	/**
-	 * Register the stylesheets for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
 	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Colr_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Colr_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/colr-public.css', array(), $this->version, 'all' );
         wp_enqueue_style( $this->plugin_name."-picker", plugin_dir_url( __FILE__ ) . 'css/colr-picker.css', array(), $this->version, 'all' );
 
 	}
 
-	/**
-	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Colr_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Colr_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/colr-public.js', array( 'jquery' ), $this->version, false );
-        wp_enqueue_script( $this->plugin_name.'-footer', plugin_dir_url( __FILE__ ) . 'js/colr-public-footer.js', array( 'jquery' ), time(), true );
-        wp_enqueue_script( $this->plugin_name.'-picker', plugin_dir_url( __FILE__ ) . 'js/colr-picker.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, COLR_DIR_PATH . 'js/colr-public.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name.'-footer', COLR_DIR_PATH . 'js/colr-public-footer.js', array( 'jquery' ), time(), true );
+        wp_enqueue_script( $this->plugin_name.'-picker', COLR_DIR_PATH . 'js/colr-picker.js', array( 'jquery' ), $this->version, true );
 
 	}
 
@@ -108,11 +32,9 @@ class Colr_Public {
      */
     public static function colr_picker(){
         ob_start();
-        // require_once COLR_DIR_PATH . 'public/class-colr-public.php';
-        require COLR_DIR_PATH . 'public/partials/picker.php';
+        require COLR_DIR_PATH . 'public/partials/colr-public-display.php';
         $html = ob_get_clean();
         echo $html;
-        //exit();
     }
 
     /**
@@ -121,40 +43,40 @@ class Colr_Public {
     public static function colr_head(){
 
         if(is_user_logged_in()){
-            global $wpdb;
+
             ob_start();
-            $colrs = self::getCurrentUsersColrScheme();
-            ?>
-            <style>
-            body {
-            background-color: <?php echo $colrs->bg ?> !important;
+
+            $colrs = (array) self::getCurrentUsersColrScheme();
+            $map = get_option('colr_map');
+
+            echo "<!-- colr -->".PHP_EOL."<style>".PHP_EOL;
+
+            $i = 1;
+            foreach($map as $dec){
+
+                $ret = $dec['selector']."{";
+                switch($dec['type']){
+                    case 1:
+                        $ret .= "color";
+                        break;
+                    case 2:
+                        $ret .= "background-color";
+                        break;
+                    case 3:
+                        $ret .= "border-color";
+                        break;
+                }
+
+                // get value from users scheme using i as key
+                $ret .= ":".$colrs[$i]." !important;}".PHP_EOL;
+
+                if(!empty($colrs[$i]) && !empty($dec['selector']) && !empty($dec['type'])){
+                    echo $ret;
+                }
+                $i++;
             }
-            nav.bg-gray-800 {
-            background-color: <?php echo $colrs->headerbg ?> !important;
-            }
-            h1 {
-            color: <?php echo $colrs->h1 ?> !important;
-            }
-            h2 {
-            color: <?php echo $colrs->h2 ?> !important;
-            }
-            a.entry-title {
-            color: <?php echo $colrs->linkbm ?> !important;
-            }
-            .entry-content p {
-            color: <?php echo $colrs->notebm ?> !important;
-            }
-            a.tag-cloud-link, .post_tags a {
-            color: <?php echo $colrs->tag ?> !important;
-            }
-            .border-r-2, .border-b-2 {
-            border: <?php echo $colrs->borderbm ?> !important;
-            }
-            .bg-indigo-500 {
-            background-color: <?php echo $colrs->btns ?> !important;
-            }
-            </style>
-        <?php } // end if user is logged in
+            echo "</style>".PHP_EOL;
+        }
         $html = ob_get_clean();
         echo $html;
     }
